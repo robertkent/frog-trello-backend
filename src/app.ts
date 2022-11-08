@@ -10,6 +10,7 @@ import graphQlResolvers from "./graphql/resolvers";
 dotenv.config();
 
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.zgbwrji.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?w=majority`;
+
 const app = express();
 
 app.use(bodyParser.json());

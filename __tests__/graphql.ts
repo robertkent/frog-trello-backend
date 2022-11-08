@@ -1,9 +1,6 @@
-const { describe, it } = require("mocha");
-const { expect } = require("chai");
-const sinon = require("sinon");
-const axios = require("axios");
+import { describe, expect, it } from "@jest/globals";
+import axios from "axios";
 
-/** @todo Stub the API call and return perfect response **/
 const axiosInstance = axios.create({
   baseURL: "http://localhost:3000/graphql",
   method: "POST",
@@ -12,9 +9,9 @@ const axiosInstance = axios.create({
 });
 
 /**
- * Just testing the GraphQL endpoint - typically wouldn't do this or maybe stub it
+ * Just testing can hit the endpoint.
  */
-describe("The graphQL API should receive incoming requests", () => {
+describe("The graphQL API should receive incoming requests (if express is running)", () => {
   it("should allow requests to the graphQL endpoint", async () => {
     const gql = {
       query: `
@@ -27,8 +24,8 @@ describe("The graphQL API should receive incoming requests", () => {
     await axiosInstance({ data: JSON.stringify(gql) })
       .then((result) => result.data.data)
       .then((data) => {
-        expect(data).to.haveOwnProperty("test");
-        expect(data.test).to.eq(true);
+        expect(data).toHaveProperty("test");
+        expect(data.test).toBe(true);
       });
   });
 });
