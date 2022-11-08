@@ -1,11 +1,11 @@
-const express = require("express");
-const cors = require("./util/cors");
-const dotenv = require("dotenv");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-const { graphqlHTTP } = require("express-graphql");
-const graphQlSchema = require("./graphql/schema");
-const graphQlResolvers = require("./graphql/resolvers");
+import express from "express";
+import { cors } from "./util/cors";
+import dotenv from "dotenv";
+import bodyParser from "body-parser";
+import mongoose from "mongoose";
+import { graphqlHTTP } from "express-graphql";
+import graphQlSchema from "./graphql/schema";
+import graphQlResolvers from "./graphql/resolvers";
 
 dotenv.config();
 

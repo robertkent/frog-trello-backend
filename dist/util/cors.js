@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.cors = void 0;
 const cors = (req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "*");
@@ -7,5 +10,4 @@ const cors = (req, res, next) => {
     }
     next();
 };
-
-module.exports = cors;
+exports.cors = cors;

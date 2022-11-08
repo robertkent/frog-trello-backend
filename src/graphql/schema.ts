@@ -1,6 +1,6 @@
 const { buildSchema } = require("graphql");
 
-module.exports = buildSchema(`
+export default buildSchema(`
 
     type RootMutation {
         test: Boolean
