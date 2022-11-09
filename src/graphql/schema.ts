@@ -52,6 +52,7 @@ export default buildSchema(`
         moveCard(input: MoveCardInput): Card!
         reorderCards(input: ReorderCardsInput): Board!
         deleteCard(input: DeleteCardInput): Card!
+        reset: BoardData
     }
 
     type RootQuery {

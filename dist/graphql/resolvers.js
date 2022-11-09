@@ -15,6 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const board_1 = __importDefault(require("../models/board"));
 const card_1 = __importDefault(require("../models/card"));
 const validator = require("validator");
+const reset = ({ input }, req) => __awaiter(void 0, void 0, void 0, function* () {
+    yield card_1.default.deleteMany({});
+    yield board_1.default.deleteMany({});
+    const board = new board_1.default({ title: "Ideas" });
+    yield board.save();
+    const boards = yield board_1.default.find().populate("cards");
+    return { boards: boards };
+});
 const deleteCard = ({ input }, req) => __awaiter(void 0, void 0, void 0, function* () {
     const cardId = input.cardId;
     const card = yield card_1.default.findById(cardId);
@@ -133,4 +141,5 @@ exports.default = {
     moveCard,
     reorderCards,
     deleteCard,
+    reset,
 };

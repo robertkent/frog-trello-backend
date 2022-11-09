@@ -8,6 +8,18 @@ type ResolverType = (
   req: RequestHandler
 ) => Promise<{}>;
 
+const reset: ResolverType = async ({ input }, req) => {
+  await Card.deleteMany({});
+  await Board.deleteMany({});
+
+  const board = new Board({ title: "Ideas" });
+  await board.save();
+
+  const boards = await Board.find().populate("cards");
+
+  return { boards: boards };
+};
+
 const deleteCard: ResolverType = async ({ input }, req) => {
   const cardId = input.cardId;
 
@@ -158,4 +170,5 @@ export default {
   moveCard,
   reorderCards,
   deleteCard,
+  reset,
 };
