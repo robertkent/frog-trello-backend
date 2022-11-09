@@ -9,7 +9,7 @@ import graphQlResolvers from "./graphql/resolvers";
 
 dotenv.config();
 
-const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.zgbwrji.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?w=majority`;
+const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/${process.env.MONGO_DEFAULT_DATABASE}?w=majority`;
 
 const app = express();
 
@@ -30,6 +30,6 @@ app.use(
 mongoose
   .connect(MONGODB_URI)
   .then((result) => {
-    app.listen(3000);
+    app.listen(process.env.NODEJS_PORT);
   })
   .catch((err) => console.log(err));

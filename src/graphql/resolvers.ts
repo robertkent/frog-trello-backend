@@ -3,10 +3,12 @@ import Card from "../models/card";
 import { RequestHandler } from "express";
 const validator = require("validator");
 
-const deleteCard: (
+type ResolverType = (
   { input }: { input: any },
   req: RequestHandler
-) => Promise<{}> = async ({ input }, req) => {
+) => Promise<{}>;
+
+const deleteCard: ResolverType = async ({ input }, req) => {
   const cardId = input.cardId;
 
   const card = await Card.findById(cardId);
@@ -25,10 +27,7 @@ const deleteCard: (
   };
 };
 
-const reorderCards: (
-  { input }: { input: any },
-  req: RequestHandler
-) => Promise<{}> = async ({ input }, req) => {
+const reorderCards: ResolverType = async ({ input }, req) => {
   const cardIds = input.cardIds;
   const boardId = input.boardId;
 
@@ -47,10 +46,7 @@ const reorderCards: (
   };
 };
 
-const moveCard: (
-  { input }: { input: any },
-  req: RequestHandler
-) => Promise<{ _id: String }> = async ({ input }, req) => {
+const moveCard: ResolverType = async ({ input }, req) => {
   const cardId = input.cardId;
   const boardId = input.boardId;
 
@@ -69,19 +65,13 @@ const moveCard: (
   };
 };
 
-const getBoards: (
-  { input }: { input: any },
-  req: RequestHandler
-) => Promise<{ boards: any[] }> = async ({ input }, req) => {
+const getBoards: ResolverType = async ({ input }, req) => {
   const boards = await Board.find().populate("cards");
 
   return { boards: boards };
 };
 
-const createCard: (
-  { input }: { input: any },
-  req: RequestHandler
-) => Promise<{ _id: String }> = async ({ input }, req) => {
+const createCard: ResolverType = async ({ input }, req) => {
   const errors: { message: String }[] = [];
 
   if (validator.isEmpty(input.title)) {
@@ -131,10 +121,7 @@ const createCard: (
   return Promise.reject();
 };
 
-const createBoard: (
-  { input }: { input: any },
-  req: RequestHandler
-) => Promise<{ _id: String }> = async ({ input }, req) => {
+const createBoard: ResolverType = async ({ input }, req) => {
   const errors: { message: String }[] = [];
 
   if (validator.isEmpty(input.title)) {

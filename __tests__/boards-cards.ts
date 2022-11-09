@@ -4,7 +4,7 @@ import { describe, expect, it } from "@jest/globals";
 import Card from "../src/models/card";
 import Board from "../src/models/board";
 
-const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.zgbwrji.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?w=majority`;
+const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/${process.env.MONGO_DEFAULT_DATABASE}?w=majority`;
 
 describe("Cards can be added and removed from boards.", () => {
   beforeEach(async () => {

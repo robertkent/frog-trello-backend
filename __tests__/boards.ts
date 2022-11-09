@@ -2,7 +2,7 @@ import mongoose, { Error, MongooseError } from "mongoose";
 import { describe, expect, it } from "@jest/globals";
 import Board from "../src/models/board";
 
-const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.zgbwrji.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?w=majority`;
+const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/${process.env.MONGO_DEFAULT_DATABASE}?w=majority`;
 
 /**
  * Using a remote Testing DB here - there are ways to use in-memory mongoDB instances too for testing.
