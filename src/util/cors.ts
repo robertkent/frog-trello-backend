@@ -1,5 +1,8 @@
 import { RequestHandler } from "express";
 
+/**
+ * To allow local react to access local node
+ */
 export const cors: RequestHandler = (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "*");

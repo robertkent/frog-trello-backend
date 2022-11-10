@@ -7,13 +7,16 @@ import Board from "../src/models/board";
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/${process.env.MONGO_DEFAULT_DATABASE}?w=majority`;
 
 describe("Reset should operate correctly.", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await mongoose.connect(MONGODB_URI);
   });
 
   afterEach(async () => {
     await Card.deleteMany({});
     await Board.deleteMany({});
+  });
+
+  afterAll(async () => {
     await mongoose.connection.close();
   });
 

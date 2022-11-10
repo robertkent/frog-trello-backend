@@ -16,8 +16,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors);
 
-// set up graphQL endpoint
-
 app.use(
   "/graphql",
   graphqlHTTP({

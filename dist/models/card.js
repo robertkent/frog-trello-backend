@@ -14,6 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const board_1 = __importDefault(require("./board"));
+/**
+ * This could be confusing but essentially in order to extend the methods for card schema object
+ * we need to pass all three types - a replica of the above.
+ *
+ * It's not clean but typescript seems to demand it.
+ *
+ * This is simply to allow use easily usable methods on card/board models.
+ */
 const cardSchema = new mongoose_1.Schema({
     title: { type: String, required: true },
     description: { type: String, required: false },
@@ -26,7 +34,7 @@ cardSchema.methods.moveCard = function (boardId) {
         if (oldBoard) {
             yield oldBoard.removeCard(this._id.toString());
         }
-        const newBoard = yield board_1.default.findOne({ _id: boardId }); // the original board
+        const newBoard = yield board_1.default.findOne({ _id: boardId }); // the new board
         if (newBoard) {
             yield newBoard.addCard(this._id.toString());
         }

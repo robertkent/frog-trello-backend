@@ -7,13 +7,16 @@ import Board from "../src/models/board";
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/${process.env.MONGO_DEFAULT_DATABASE}?w=majority`;
 
 describe("Cards can be added and removed from boards.", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await mongoose.connect(MONGODB_URI);
   });
 
   afterEach(async () => {
     await Card.deleteMany({});
     await Board.deleteMany({});
+  });
+
+  afterAll(async () => {
     await mongoose.connection.close();
   });
 
@@ -23,7 +26,7 @@ describe("Cards can be added and removed from boards.", () => {
     const mockCard = {
       title: "This is a title",
       dueDate: new Date().toISOString(),
-      board: savedBoard._id.toString(),
+      board: savedBoard._id,
     };
     const savedCard = await new Card(mockCard).save();
 
@@ -42,14 +45,14 @@ describe("Cards can be added and removed from boards.", () => {
     const mockCard1 = {
       title: "This is a title",
       dueDate: new Date().toISOString(),
-      board: savedBoard._id.toString(),
+      board: savedBoard._id,
     };
     const savedCard1 = await new Card(mockCard1).save();
 
     const mockCard2 = {
       title: "This is a different card",
       dueDate: new Date().toISOString(),
-      board: savedBoard._id.toString(),
+      board: savedBoard._id,
     };
     const savedCard2 = await new Card(mockCard2).save();
 
@@ -58,9 +61,10 @@ describe("Cards can be added and removed from boards.", () => {
 
     const updatedBoard = await Board.findById(savedBoard._id);
 
+    // reversed order due to most recent at top of stack function
     expect(updatedBoard).toHaveProperty("cards", [
-      savedCard1._id,
       savedCard2._id,
+      savedCard1._id,
     ]);
   });
 
@@ -116,15 +120,16 @@ describe("Cards can be added and removed from boards.", () => {
     await savedBoard.addCard(savedCard2._id);
     await savedBoard.addCard(savedCard3._id);
 
-    const originalOrder = [savedCard1._id, savedCard2._id, savedCard3._id];
+    // more recently added cards are now added at the top of the stack (unshift)
+    const originalOrder = [savedCard3._id, savedCard2._id, savedCard1._id];
 
     expect(savedBoard).toHaveProperty("cards", originalOrder);
 
     const updatedOrder = [savedCard3._id, savedCard1._id, savedCard2._id];
 
-    await savedBoard.reorderCards(updatedOrder);
+    const updatedBoard = await savedBoard.reorderCards(updatedOrder);
 
-    expect(savedBoard).toHaveProperty("cards", updatedOrder);
+    expect(updatedBoard).toHaveProperty("cards", updatedOrder);
   });
 
   it("should not allow unverified card ids to be submitted to the request", async () => {
@@ -155,7 +160,7 @@ describe("Cards can be added and removed from boards.", () => {
     await savedBoard.addCard(savedCard2._id);
     await savedBoard.addCard(savedCard3._id);
 
-    const originalOrder = [savedCard1._id, savedCard2._id, savedCard3._id];
+    const originalOrder = [savedCard3._id, savedCard2._id, savedCard1._id];
 
     expect(savedBoard).toHaveProperty("cards", originalOrder);
 
@@ -238,8 +243,8 @@ describe("Cards can be added and removed from boards.", () => {
     await savedBoard1.addCard(savedCard2._id);
 
     expect(savedBoard1).toHaveProperty("cards", [
-      savedCard1._id,
       savedCard2._id,
+      savedCard1._id,
     ]);
 
     await savedCard1.moveCard(savedBoard2._id);

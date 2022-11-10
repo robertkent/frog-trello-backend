@@ -16,7 +16,6 @@ const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
 app.use(cors_1.cors);
-// set up graphQL endpoint
 app.use("/graphql", (0, express_graphql_1.graphqlHTTP)({
     schema: schema_1.default,
     rootValue: resolvers_1.default,

@@ -8,12 +8,15 @@ const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO
  * Using a remote Testing DB here - there are ways to use in-memory mongoDB instances too for testing.
  */
 describe("Boards should validate correctly.", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await mongoose.connect(MONGODB_URI);
   });
 
   afterEach(async () => {
     await Board.deleteMany({});
+  });
+
+  afterAll(async () => {
     await mongoose.connection.close();
   });
 

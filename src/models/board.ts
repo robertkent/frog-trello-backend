@@ -32,6 +32,15 @@ boardSchema.methods.addCard = async function (cardId: Schema.Types.ObjectId) {
   return await this.save();
 };
 
+/**
+ * This is an alternative to the includes that you can find @reorderCards.
+ *
+ * Instead of typing as ObjectID we could also convert to strings and compare.
+ *
+ * Without this filter() can't compare 2x Object IDs (even if the variables are equal
+ * - same with array.find or indexOf
+ *
+ */
 boardSchema.methods.removeCard = async function (
   cardId: Schema.Types.ObjectId
 ) {
@@ -45,7 +54,11 @@ boardSchema.methods.removeCard = async function (
 /**
  * Should have a check here to make sure we're not passing in anything that's not a valid cardID
  *
- * @param cardIds
+ * More validation required than just this - but essentially we're setting a list of IDs in a non-relational
+ * DB so something should be done at least.
+ *
+ * Might not have time to implement this on the frontend as it'll require an additional sortable feature within
+ * the same list.
  */
 boardSchema.methods.reorderCards = async function (
   cardIds: Schema.Types.ObjectId[]

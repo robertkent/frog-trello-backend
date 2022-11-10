@@ -3,6 +3,12 @@ import Card from "../models/card";
 import { RequestHandler } from "express";
 const validator = require("validator");
 
+/**
+ * Most resolvers are the same - or at least we can expect a promise with different return data.
+ * To clear up this file I've just created a ResolverType than expects an object - as all return an object.
+ *
+ * Could make this clearer per type e.g. Promise<{ board: Board[] }
+ */
 type ResolverType = (
   { input }: { input: any },
   req: RequestHandler
