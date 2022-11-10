@@ -21,7 +21,7 @@ const boardSchema = new mongoose_1.Schema({
 boardSchema.methods.addCard = function (cardId) {
     return __awaiter(this, void 0, void 0, function* () {
         const updatedCards = [...this.cards];
-        updatedCards.push(cardId);
+        updatedCards.unshift(cardId);
         this.cards = updatedCards;
         return yield this.save();
     });

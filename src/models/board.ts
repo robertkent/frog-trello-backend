@@ -26,7 +26,7 @@ const boardSchema = new Schema<IBoard, BoardModel, IBoardMethods>(
 
 boardSchema.methods.addCard = async function (cardId: Schema.Types.ObjectId) {
   const updatedCards = [...this.cards];
-  updatedCards.push(cardId);
+  updatedCards.unshift(cardId);
   this.cards = updatedCards;
 
   return await this.save();
