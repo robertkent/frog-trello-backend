@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
+const card_1 = __importDefault(require("./card"));
 const boardSchema = new mongoose_1.Schema({
     title: { type: String, required: true },
     cards: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "card" }],
@@ -43,6 +47,12 @@ boardSchema.methods.reorderCards = function (cardIds) {
         }
         this.cards = cardIds;
         return yield this.save();
+    });
+};
+boardSchema.methods.delete = function () {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield card_1.default.deleteMany({ board: this._id });
+        return this.remove();
     });
 };
 exports.default = (0, mongoose_1.model)("board", boardSchema);

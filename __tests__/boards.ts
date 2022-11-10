@@ -52,4 +52,19 @@ describe("Boards should validate correctly.", () => {
 
     expect(savedBoard).toHaveProperty("cards", []);
   });
+
+  it("should remove a board", async () => {
+    const mockBoard = { title: "A test board" };
+    const boardModel = new Board(mockBoard);
+
+    const savedBoard = await boardModel.save();
+
+    expect(savedBoard).toHaveProperty("cards", []);
+
+    await savedBoard.delete();
+
+    const boardCount = await Board.countDocuments({});
+
+    expect(boardCount).toBe(0);
+  });
 });

@@ -12,12 +12,27 @@ const reset: ResolverType = async ({ input }, req) => {
   await Card.deleteMany({});
   await Board.deleteMany({});
 
-  const board = new Board({ title: "Ideas" });
-  await board.save();
-
   const boards = await Board.find().populate("cards");
 
   return { boards: boards };
+};
+
+const deleteBoard: ResolverType = async ({ input }, req) => {
+  const boardId = input.boardId;
+
+  const board = await Board.findById(boardId);
+
+  if (!board) {
+    throw new Error("could not find the board to delete!");
+  }
+
+  const deletedBoard = await board.delete();
+
+  return {
+    _id: deletedBoard._id.toString(),
+    title: deletedBoard.title,
+    cards: deletedBoard.cards,
+  };
 };
 
 const deleteCard: ResolverType = async ({ input }, req) => {
@@ -29,13 +44,13 @@ const deleteCard: ResolverType = async ({ input }, req) => {
     throw new Error("could not find the card to delete!");
   }
 
-  const updatedCard = await card.delete();
+  const deletedCard = await card.delete();
 
   return {
-    _id: updatedCard._id.toString(),
-    title: updatedCard.title,
-    description: updatedCard.description,
-    dueDate: updatedCard.dueDate,
+    _id: deletedCard._id.toString(),
+    title: deletedCard.title,
+    description: deletedCard.description,
+    dueDate: deletedCard.dueDate,
   };
 };
 
@@ -170,5 +185,6 @@ export default {
   moveCard,
   reorderCards,
   deleteCard,
+  deleteBoard,
   reset,
 };

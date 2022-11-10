@@ -18,10 +18,21 @@ const validator = require("validator");
 const reset = ({ input }, req) => __awaiter(void 0, void 0, void 0, function* () {
     yield card_1.default.deleteMany({});
     yield board_1.default.deleteMany({});
-    const board = new board_1.default({ title: "Ideas" });
-    yield board.save();
     const boards = yield board_1.default.find().populate("cards");
     return { boards: boards };
+});
+const deleteBoard = ({ input }, req) => __awaiter(void 0, void 0, void 0, function* () {
+    const boardId = input.boardId;
+    const board = yield board_1.default.findById(boardId);
+    if (!board) {
+        throw new Error("could not find the board to delete!");
+    }
+    const deletedBoard = yield board.delete();
+    return {
+        _id: deletedBoard._id.toString(),
+        title: deletedBoard.title,
+        cards: deletedBoard.cards,
+    };
 });
 const deleteCard = ({ input }, req) => __awaiter(void 0, void 0, void 0, function* () {
     const cardId = input.cardId;
@@ -29,12 +40,12 @@ const deleteCard = ({ input }, req) => __awaiter(void 0, void 0, void 0, functio
     if (!card) {
         throw new Error("could not find the card to delete!");
     }
-    const updatedCard = yield card.delete();
+    const deletedCard = yield card.delete();
     return {
-        _id: updatedCard._id.toString(),
-        title: updatedCard.title,
-        description: updatedCard.description,
-        dueDate: updatedCard.dueDate,
+        _id: deletedCard._id.toString(),
+        title: deletedCard.title,
+        description: deletedCard.description,
+        dueDate: deletedCard.dueDate,
     };
 });
 const reorderCards = ({ input }, req) => __awaiter(void 0, void 0, void 0, function* () {
@@ -141,5 +152,6 @@ exports.default = {
     moveCard,
     reorderCards,
     deleteCard,
+    deleteBoard,
     reset,
 };

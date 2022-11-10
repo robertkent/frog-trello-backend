@@ -55,13 +55,10 @@ describe("Reset should operate correctly.", () => {
     await Board.deleteMany({});
     await Card.deleteMany({});
 
-    const defaultBoard = new Board({ title: "Ideas" });
-    await defaultBoard.save();
-
     boardCount = await Board.countDocuments({});
     cardCount = await Card.countDocuments({});
 
-    expect(boardCount).toBe(1);
+    expect(boardCount).toBe(0);
     expect(cardCount).toBe(0);
   });
 });

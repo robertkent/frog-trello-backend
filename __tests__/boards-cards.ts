@@ -187,4 +187,31 @@ describe("Cards can be added and removed from boards.", () => {
 
     expect(updatedBoard).toHaveProperty("cards", []);
   });
+
+  it("should remove all cards associated with a board when that board is removed", async () => {
+    const savedBoard = await new Board({ title: "A test board" }).save();
+
+    const mockCard = {
+      title: "This is first position",
+      dueDate: new Date().toISOString(),
+      board: savedBoard._id,
+    };
+    const savedCard = await new Card(mockCard).save();
+
+    await savedBoard.addCard(savedCard._id);
+
+    const updatedBoard = await Board.findById(savedBoard);
+
+    expect(updatedBoard).toHaveProperty("cards", [savedCard._id]);
+
+    const boardToDelete = await Board.findById(savedBoard);
+
+    if (boardToDelete) {
+      await boardToDelete.delete();
+    }
+
+    const cardCount = await Card.countDocuments({});
+
+    expect(cardCount).toBe(0);
+  });
 });

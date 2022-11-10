@@ -1,4 +1,5 @@
 import { Model, model, Schema } from "mongoose";
+import Card from "./card";
 
 interface IBoard {
   _id: Schema.Types.ObjectId;
@@ -10,6 +11,7 @@ interface IBoardMethods {
   addCard(cardId: Schema.Types.ObjectId): Promise<IBoard>;
   removeCard(cardId: Schema.Types.ObjectId): Promise<IBoard>;
   reorderCards(cardIds: Schema.Types.ObjectId[]): Promise<IBoard>;
+  delete(): Promise<IBoard>;
 }
 
 type BoardModel = Model<IBoard, {}, IBoardMethods>;
@@ -59,6 +61,12 @@ boardSchema.methods.reorderCards = async function (
 
   this.cards = cardIds;
   return await this.save();
+};
+
+boardSchema.methods.delete = async function () {
+  await Card.deleteMany({ board: this._id });
+
+  return this.remove();
 };
 
 export default model("board", boardSchema);

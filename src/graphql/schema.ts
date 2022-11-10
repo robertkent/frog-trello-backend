@@ -44,6 +44,10 @@ export default buildSchema(`
     input DeleteCardInput {
         cardId: ID!
     }
+    
+    input DeleteBoardInput {
+        boardId: ID!
+    }
 
     type RootMutation {
         test: Boolean
@@ -52,6 +56,7 @@ export default buildSchema(`
         moveCard(input: MoveCardInput): Card!
         reorderCards(input: ReorderCardsInput): Board!
         deleteCard(input: DeleteCardInput): Card!
+        deleteBoard(input: DeleteBoardInput): Board!
         reset: BoardData
     }
 
