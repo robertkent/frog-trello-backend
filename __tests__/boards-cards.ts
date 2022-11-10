@@ -214,4 +214,40 @@ describe("Cards can be added and removed from boards.", () => {
 
     expect(cardCount).toBe(0);
   });
+
+  // current bug
+  it("should allow the first card from multiple cards to be moved to another board correctly", async () => {
+    const savedBoard1 = await new Board({ title: "A test board" }).save();
+    const savedBoard2 = await new Board({ title: "Another test board" }).save();
+
+    const mockCard1 = {
+      title: "This is a title",
+      dueDate: new Date().toISOString(),
+      board: savedBoard1._id,
+    };
+    const savedCard1 = await new Card(mockCard1).save();
+
+    const mockCard2 = {
+      title: "This is a title",
+      dueDate: new Date().toISOString(),
+      board: savedBoard1._id,
+    };
+    const savedCard2 = await new Card(mockCard2).save();
+
+    await savedBoard1.addCard(savedCard1._id);
+    await savedBoard1.addCard(savedCard2._id);
+
+    expect(savedBoard1).toHaveProperty("cards", [
+      savedCard1._id,
+      savedCard2._id,
+    ]);
+
+    await savedCard1.moveCard(savedBoard2._id);
+
+    const updatedBoard1 = await Board.findById(savedBoard1._id);
+    const updatedBoard2 = await Board.findById(savedBoard2._id);
+
+    expect(updatedBoard1).toHaveProperty("cards", [savedCard2._id]);
+    expect(updatedBoard2).toHaveProperty("cards", [savedCard1._id]);
+  });
 });

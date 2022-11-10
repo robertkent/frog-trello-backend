@@ -28,17 +28,16 @@ boardSchema.methods.addCard = async function (cardId: Schema.Types.ObjectId) {
   const updatedCards = [...this.cards];
   updatedCards.push(cardId);
   this.cards = updatedCards;
+
   return await this.save();
 };
 
 boardSchema.methods.removeCard = async function (
   cardId: Schema.Types.ObjectId
 ) {
-  const updatedCards = [...this.cards];
-
-  updatedCards.splice(updatedCards.indexOf(cardId), 1);
-
-  this.cards = updatedCards;
+  this.cards = this.cards.filter(
+    (card: any) => card.toString() !== cardId.toString()
+  );
 
   return await this.save();
 };
@@ -66,7 +65,7 @@ boardSchema.methods.reorderCards = async function (
 boardSchema.methods.delete = async function () {
   await Card.deleteMany({ board: this._id });
 
-  return this.remove();
+  return await this.remove();
 };
 
 export default model("board", boardSchema);

@@ -24,14 +24,14 @@ cardSchema.methods.moveCard = function (boardId) {
     return __awaiter(this, void 0, void 0, function* () {
         const oldBoard = yield board_1.default.findOne({ _id: this.board }); // the original board
         if (oldBoard) {
-            yield oldBoard.removeCard(this._id);
+            yield oldBoard.removeCard(this._id.toString());
+        }
+        const newBoard = yield board_1.default.findOne({ _id: boardId }); // the original board
+        if (newBoard) {
+            yield newBoard.addCard(this._id.toString());
         }
         this.board = boardId;
-        const newBoard = yield board_1.default.findOne({ _id: this.board }); // the original board
-        if (newBoard) {
-            yield newBoard.addCard(this._id);
-        }
-        return this.save();
+        return yield this.save();
     });
 };
 cardSchema.methods.delete = function () {
@@ -40,7 +40,7 @@ cardSchema.methods.delete = function () {
         if (board) {
             yield board.removeCard(this._id);
         }
-        return this.remove();
+        return yield this.remove();
     });
 };
 exports.default = (0, mongoose_1.model)("card", cardSchema);

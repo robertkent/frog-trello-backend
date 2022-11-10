@@ -30,18 +30,18 @@ cardSchema.methods.moveCard = async function (boardId: Schema.Types.ObjectId) {
   const oldBoard = await Board.findOne({ _id: this.board }); // the original board
 
   if (oldBoard) {
-    await oldBoard.removeCard(this._id);
+    await oldBoard.removeCard(this._id.toString());
+  }
+
+  const newBoard = await Board.findOne({ _id: boardId }); // the original board
+
+  if (newBoard) {
+    await newBoard.addCard(this._id.toString());
   }
 
   this.board = boardId;
 
-  const newBoard = await Board.findOne({ _id: this.board }); // the original board
-
-  if (newBoard) {
-    await newBoard.addCard(this._id);
-  }
-
-  return this.save();
+  return await this.save();
 };
 
 cardSchema.methods.delete = async function () {
@@ -51,7 +51,7 @@ cardSchema.methods.delete = async function () {
     await board.removeCard(this._id);
   }
 
-  return this.remove();
+  return await this.remove();
 };
 
 export default model("card", cardSchema);

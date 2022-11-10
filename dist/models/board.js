@@ -28,9 +28,7 @@ boardSchema.methods.addCard = function (cardId) {
 };
 boardSchema.methods.removeCard = function (cardId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const updatedCards = [...this.cards];
-        updatedCards.splice(updatedCards.indexOf(cardId), 1);
-        this.cards = updatedCards;
+        this.cards = this.cards.filter((card) => card.toString() !== cardId.toString());
         return yield this.save();
     });
 };
@@ -52,7 +50,7 @@ boardSchema.methods.reorderCards = function (cardIds) {
 boardSchema.methods.delete = function () {
     return __awaiter(this, void 0, void 0, function* () {
         yield card_1.default.deleteMany({ board: this._id });
-        return this.remove();
+        return yield this.remove();
     });
 };
 exports.default = (0, mongoose_1.model)("board", boardSchema);
